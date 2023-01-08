@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>@ViewBag.Title</title>
+    <script src="https://kit.fontawesome.com/ca270387f2.js"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="~/style.css" asp-append-version="true"/>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fa-solid fa-location-dot"></i>
+            <strong>URL Shortener</strong>
+        </div>
+        <div class="nav-list">
+            <ul>
+                <li><a asp-action="Index" asp-controller="Urls">Home</a></li>
+                <li><a asp-action="About" asp-controller="Urls">About</a></li>
+            </ul>
+        </div>
+        @if (!User.Identity?.IsAuthenticated ?? true)
+        {
+            <a class="login-button" asp-action="Login" asp-controller="Authorithation">Log In</a>
+        }
+        else
+        {
+            <a class="login-button" asp-action="Logout" asp-controller="Authorithation">Log Out</a>
+            <span class="profile-info">@User.Identity.Name</span>
+        }
+    </nav>
+    <main>
+        @RenderBody()
+    </main>
+</body>
+</html>

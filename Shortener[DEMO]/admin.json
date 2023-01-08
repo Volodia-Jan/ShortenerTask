@@ -1,0 +1,10 @@
+{
+  "Email": "admin@example.com",
+  "EmailConfirmed": false,
+  "Id": "2EA1E1F3-27A1-4140-B938-F1F2F2829478",
+  "PasswordHash": "admin",
+  "PersonName": "Admin",
+  "PhoneNumber": "1234567890",
+  "PhoneNumberConfirmed": false,
+  "UserName": "admin@example.com"
+}

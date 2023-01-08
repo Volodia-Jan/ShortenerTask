@@ -1,0 +1,50 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Register page";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <link href="@("http://"  + Context.Request.Host.ToString() + "/auth.css")" rel="stylesheet" />
+    <main>
+        <div class="container">
+            <div class="form-container">
+                <h4>Register</h4>
+                <form asp-action="Register" asp-controller="Authorithation">
+                    <div class="form-field">
+                        <label for="userName">Full name:</label>
+                        <input type="text" name="userName" id="userName" />
+                    </div>
+                    <div class="form-field">
+                        <label for="email">Email:</label>
+                        <input type="text" name="email" id="email" />
+                    </div>
+                    <div class="form-field">
+                        <label for="username">Phone:</label>
+                        <input type="phone" name="phone" id="phone" />
+                    </div>
+                    <div class="form-field">
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" id="password" />
+                    </div>
+                    <div class="form-field">
+                        <label for="confirmPassword">Confirm Password:</label>
+                        <input type="password" name="confirmPassword" id="confirmPassword" />
+                    </div>
+                    <div class="form-field">
+                        <button>Register</button>
+                    </div>
+                    <p class="auth-link">
+                        Already have account?<a asp-action="Login" asp-controller="Authorithation"> Log in</a>
+                    </p>
+                </form>
+                <div class="error-message">@ViewBag.ErrorMessage</div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

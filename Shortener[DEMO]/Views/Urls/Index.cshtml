@@ -1,0 +1,41 @@
+﻿@model IEnumerable<UrlResponse>
+
+@{
+    ViewBag.Title = "Shorten Urls";
+    bool IsAuthenticated = User.Identity is not null && User.Identity.IsAuthenticated;
+}
+@if (IsAuthenticated)
+{
+    <div class="add">
+        <p>Add new URL</p>
+        <form asp-action="Create" asp-controller="Urls" method="post">
+            <input type="text" name="url" id="url" placeholder="URL" />
+            <div class="error-message"></div>
+            <button>Add</button>
+        </form>
+    </div>
+}
+<div class="urlTable">
+        <table>
+            <thead>
+                <tr>
+                    <th>URL</th>
+                    <th>Shorten Url</th>
+                    <th>Operations</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach(UrlResponse url in Model)
+            {
+                <tr>
+                    <td><a href="@url.Url">@url.Url</a></td>
+                    <td><a asp-action="RedirectByShortUrl" asp-controller="Urls" asp-route-shortUrl="@url.ShortUrl">@url.ShortUrl</a></td>
+                    <td class="operations">
+                        <a asp-action="Info" asp-controller="Urls" asp-route-urlId="@url.UrlId">Info</a>
+                        <a asp-action="Delete" asp-controller="Urls" asp-route-urlId="@url.UrlId">Delete</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>

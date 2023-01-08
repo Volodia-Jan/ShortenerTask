@@ -1,0 +1,33 @@
+﻿@model UrlResponse
+
+@{
+    ViewBag.Title = "Url info";
+    if (Model.CreatedDate is null)
+    {
+        Model.CreatedDate = DateTime.Now;
+    }
+}
+<div class="urlTable">
+    <table>
+        <thead>
+            <tr>
+                <th>URL</th>
+                <th>Shorten Url</th>
+                <th>Created by</th>
+                <th>Created at</th>
+                <th>Operstions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="@Model.Url">@Model.Url</a></td>
+                <td><a asp-action="RedirectByShortUrl" asp-controller="Urls" asp-route-shortUrl="@Model.ShortUrl">@Model.ShortUrl</a></td>
+                <td>@Model.Username</td>
+                <td>@Model.CreatedDate.Value.ToString("dd/MM/yyyy HH:mm")</td>
+                <td class="operations">
+                    <a asp-action="Index" asp-controller="Urls">Go Back</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

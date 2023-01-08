@@ -1,0 +1,39 @@
+﻿@model IEnumerable<PostResponse>
+
+@{
+    ViewBag.Title = "About";
+}
+<div class="articles">
+    <article>
+        <h4>Shortener algorithm | <i>Volodymyr Hula</i></h4>
+        <p>
+            When user adding url it checks is url valid. Next it looks does URL
+            exist in Db. If exist it throws ArgumentException.The next step is
+            initialize properties. Shotr URL is being created by using localhost
+            path and hash code of URL id. After that it saves entity in Db and
+            returns DTO object
+        </p>
+        <span class="article-date-stamp">22:10 07.01.2023</span>
+    </article>
+    @foreach (PostResponse response in Model)
+    {
+        <article>
+            <h4>@response.Topic | <i>@response.AuthorName</i></h4>
+            <p>@response.PostDetails</p>
+            <span class="article-date-stamp">@response.CreatedAt.Value.ToString("HH:mm dd.MM.yyyy")</span>
+        </article>
+    }
+</div>
+<div class="create-article-container">
+    <div class="create-article">
+        <form asp-action="About" asp-controller="Urls" method="post">
+            <div class="form-field">
+                <label for="topic">Topic</label>
+                <input type="text" name="topic" id="topic" />
+            </div>
+            <label for="userArticle">Input</label>
+            <textarea name="postDetails" id="userArticle" cols="37" rows="10"></textarea>
+            <div class="form-field"><button>Post</button></div>
+        </form>
+    </div>
+</div>
