@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Shorten Urls";
-    bool IsAuthenticated = User.Identity is not null && User.Identity.IsAuthenticated;
+bool IsAuthenticated = User.Identity is not null && User.Identity.IsAuthenticated;
 }
 @if (IsAuthenticated)
 {
@@ -26,8 +26,8 @@
             </thead>
             <tbody>
             @foreach(UrlResponse url in Model)
-            {
-                <tr>
+        {
+            <tr>
                     <td><a href="@url.Url">@url.Url</a></td>
                     <td><a asp-action="RedirectByShortUrl" asp-controller="Urls" asp-route-shortUrl="@url.ShortUrl">@url.ShortUrl</a></td>
                     <td class="operations">
@@ -35,7 +35,7 @@
                         <a asp-action="Delete" asp-controller="Urls" asp-route-urlId="@url.UrlId">Delete</a>
                     </td>
                 </tr>
-            }
+        }
             </tbody>
         </table>
     </div>

@@ -12,5 +12,5 @@ public interface IPostsService
 
     Task<PostResponse> AddNewPost(AddPostRequest? addPostRequest);
 
-    Task<List<PostResponse>> GetAllPosts();  
+    Task<List<PostResponse>> GetAllPosts();
 }

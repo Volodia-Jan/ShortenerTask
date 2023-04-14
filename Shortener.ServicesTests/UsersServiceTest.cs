@@ -1,6 +1,8 @@
 using AutoFixture;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
+using Serilog;
 using Shortener.Core.DTO;
 using Shortener.Core.IdentityEntities;
 using Shortener.Core.RepositoryContracts;
@@ -13,6 +15,8 @@ public class UsersServiceTest
 {
     private readonly IUsersService _usersService;
     private readonly Mock<IUsersRepository> _mockUsersRepository;
+    private readonly Mock<IDiagnosticContext> _mockDiagnosticContext;
+    private readonly Mock<ILogger<UsersService>> _mockLogger;
     private readonly IUsersRepository _usersRepository;
     private readonly IFixture _fixture;
 
@@ -21,7 +25,9 @@ public class UsersServiceTest
         _fixture = new Fixture();
         _mockUsersRepository = new Mock<IUsersRepository>();
         _usersRepository = _mockUsersRepository.Object;
-        _usersService = new UsersService(_usersRepository);
+        _mockDiagnosticContext = new Mock<IDiagnosticContext>();
+        _mockLogger = new Mock<ILogger<UsersService>>();
+        _usersService = new UsersService(_usersRepository, _mockLogger.Object, _mockDiagnosticContext.Object);
     }
 
     #region RegisterUser

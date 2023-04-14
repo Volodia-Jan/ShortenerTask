@@ -16,10 +16,10 @@ public class ApplicationUser : IdentityUser<Guid>
 public static class ApplicationUserExtensions
 {
     public static UserResponse ToResponse(this ApplicationUser user) => new()
-        {
-            Id = user.Id,
-            UserName = user.PersonName,
-            Email = user.Email,
-            Phone = user.PhoneNumber
-        };
+    {
+        Id = user.Id,
+        UserName = user.PersonName,
+        Email = user.Email,
+        Phone = user.PhoneNumber
+    };
 }

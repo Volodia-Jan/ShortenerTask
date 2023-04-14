@@ -20,14 +20,14 @@
             </ul>
         </div>
         @if (!User.Identity?.IsAuthenticated ?? true)
-        {
-            <a class="login-button" asp-action="Login" asp-controller="Authorithation">Log In</a>
-        }
-        else
-        {
-            <a class="login-button" asp-action="Logout" asp-controller="Authorithation">Log Out</a>
-            <span class="profile-info">@User.Identity.Name</span>
-        }
+    {
+        <a class="login-button" asp-action="Login" asp-controller="Authorithation">Log In</a>
+    }
+    else
+    {
+        <a class="login-button" asp-action="Logout" asp-controller="Authorithation">Log Out</a>
+        <span class="profile-info">@User.Identity.Name</span>
+    }
     </nav>
     <main>
         @RenderBody()

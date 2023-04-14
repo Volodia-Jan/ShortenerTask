@@ -35,4 +35,12 @@ public class UserResponse
         result = 31 * result + (Phone?.GetHashCode() ?? 0);
         return result;
     }
+
+    public override string ToString()
+    {
+        return $"UserResponse{{ Id:{Id}, " +
+            $"UserName:{UserName}, " +
+            $"Email:{Email}, " +
+            $"Phone: {Phone} }}";
+    }
 }

@@ -10,7 +10,7 @@ namespace Shortener.Core.Helpers;
 
 public static class ShortUrlHelper
 {
-    public static string Encode(int num) 
+    public static string Encode(int num)
         => WebEncoders.Base64UrlEncode(BitConverter.GetBytes(num));
 
     public static int Decode(string str)

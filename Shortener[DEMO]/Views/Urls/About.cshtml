@@ -16,13 +16,13 @@
         <span class="article-date-stamp">22:10 07.01.2023</span>
     </article>
     @foreach (PostResponse response in Model)
-    {
-        <article>
+{
+    <article>
             <h4>@response.Topic | <i>@response.AuthorName</i></h4>
             <p>@response.PostDetails</p>
             <span class="article-date-stamp">@response.CreatedAt.Value.ToString("HH:mm dd.MM.yyyy")</span>
         </article>
-    }
+}
 </div>
 <div class="create-article-container">
     <div class="create-article">

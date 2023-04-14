@@ -42,6 +42,15 @@ public class PostResponse
 
         return result;
     }
+
+    public override string? ToString()
+    {
+        return $"AddPostRequest{{ Id:{Id}, " +
+            $"Topic:{Topic}, " +
+            $"PostDetails:{PostDetails}, " +
+            $"AuthorName:{AuthorName}, " +
+            $"CreatedAt:{CreatedAt} }}";
+    }
 }
 
 public static class PostExtensions

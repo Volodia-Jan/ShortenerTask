@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Shortener.Core.DTO;
 using Shortener.Core.Entities;
+using Shortener.Core.Exceptions;
 using Shortener.Core.Helper;
 using Shortener.Core.Helpers;
 using Shortener.Core.IdentityEntities;
@@ -40,7 +41,7 @@ public class UrlsService : IUrlsService
             && !(uriResult?.Scheme == Uri.UriSchemeHttp || uriResult?.Scheme == Uri.UriSchemeHttps))
             throw new ArgumentException($"{detinationUrl} is not valid URL");
 
-        Url url = new(){ BaseUrl = detinationUrl };
+        Url url = new() { BaseUrl = detinationUrl };
 
         return AddNewUrlAsync(url);
 
@@ -75,7 +76,7 @@ public class UrlsService : IUrlsService
             var isAdmin = await _usersService.IsUserHasRole(user?.Email ?? string.Empty, "Admin");
             var url = (await _urlsRepository.FindById(id))?.ToResponse();
             if (url is null)
-                throw new ArgumentException($"Url was not found by id:{id}");
+                throw new UrlNotFoundException($"Url was not found by id:{id}");
 
             if (isAdmin || url.Username == user.Email)
                 return await _urlsRepository.DeleteById(id);
@@ -84,14 +85,10 @@ public class UrlsService : IUrlsService
         }
     }
 
-    public async Task<List<UrlResponse>> GetAllUrls()
-    {
-        var urls = await _urlsRepository.FindAll();
-
-        return urls
+    public async Task<List<UrlResponse>> GetAllUrls() =>
+        (await _urlsRepository.FindAll())
             .Select(url => url.ToResponse())
             .ToList();
-    }
 
     public async Task<UrlResponse> GetUrlById(Guid? urlId)
     {
@@ -100,7 +97,7 @@ public class UrlsService : IUrlsService
 
         var url = await _urlsRepository.FindById(urlId.Value);
         return url is null
-            ? throw new ArgumentException($"Url was not found by Id:{urlId.Value}")
+            ? throw new UrlNotFoundException($"Url was not found by Id:{urlId.Value}")
             : url.ToResponse();
     }
 
@@ -108,7 +105,7 @@ public class UrlsService : IUrlsService
     {
         Url? url = await _urlsRepository.FindByShortUrl(shortUrl);
 
-        return url?.ToResponse() ?? throw new ArgumentException($"Url was not found by shortUlr:{shortUrl}");
+        return url?.ToResponse() ?? throw new UrlNotFoundException($"Url was not found by shortUlr:{shortUrl}");
     }
 
     private async Task<UserResponse> GetCurrentUser()
@@ -119,7 +116,7 @@ public class UrlsService : IUrlsService
 
         var user = await _usersService.GetUserByEmail(userName);
         if (user is null)
-            throw new ArgumentException($"{nameof(user)} is null");
+            throw new UrlNotFoundException($"{nameof(user)} is null");
 
         return user;
     }

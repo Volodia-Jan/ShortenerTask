@@ -4,42 +4,41 @@ using Microsoft.AspNetCore.Mvc;
 using Shortener.Core.DTO;
 using Shortener.Core.IdentityEntities;
 using Shortener.Core.ServiceContracts;
+using Shortener_DEMO_.Filters.ActionFilters;
 
 namespace Shortener_DEMO_.Controllers;
 
-[Route("/auth/[action]")]
+[Route("/Auth/[action]")]
 [AllowAnonymous]
 public class AuthorithationController : Controller
 {
 
     private readonly IUsersService _usersService;
+    private readonly ILogger<AuthorithationController> _logger;
 
-    public AuthorithationController(IUsersService usersService)
+    public AuthorithationController(IUsersService usersService, ILogger<AuthorithationController> logger)
     {
         _usersService = usersService;
+        _logger = logger;
     }
 
     [HttpGet]
+    [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "X-Custom-Key", "Custom-Value" })]
     public IActionResult Register()
     {
+        _logger.LogInformation($"{nameof(AuthorithationController.Register)} action method(parametreless) of {nameof(AuthorithationController)}");
         return View();
     }
 
     [HttpPost]
+    [TypeFilter(typeof(RegisterAndLoginActionFilter))]
     public async Task<IActionResult> Register(RegisterDto registerDto)
     {
-        if (!ModelState.IsValid)
-        {
-            List<string> errors = ModelState.Values
-                .SelectMany(error => error.Errors)
-                .Select(error => error.ErrorMessage)
-                .ToList();
-            ViewBag.ErrorMessage = string.Join("\n", errors);
-            return View();
-        }
-
+        _logger.LogInformation($"{nameof(AuthorithationController.Register)} action method with parameters of {nameof(AuthorithationController)}");
+        _logger.LogDebug($"{registerDto}");
         var isRegistered = await _usersService.Register(registerDto);
         ViewBag.ErrorMessage = "Something goes wrong!";
+
         return isRegistered ? RedirectToAction(nameof(UrlsController.Index), "Urls") : View();
     }
 
@@ -50,26 +49,26 @@ public class AuthorithationController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login(LoginDTO loginDTO)
+    [TypeFilter(typeof(RegisterAndLoginActionFilter))]
+    public async Task<IActionResult> Login(LoginDTO loginDTO, string? ReturnUrl)
     {
-        if (!ModelState.IsValid)
-        {
-            List<string> errors = ModelState.Values
-                .SelectMany(error => error.Errors)
-                .Select(error => error.ErrorMessage)
-                .ToList();
-            ViewBag.ErrorMessage = string.Join("\n", errors);
-            return View(loginDTO);
-        }
-
         var isLogedIn = await _usersService.Login(loginDTO);
         ViewBag.ErrorMessage = "Invalid username or/and password!";
+
         return isLogedIn ? RedirectToAction(nameof(UrlsController.Index), "Urls") : View();
     }
 
     public async Task<IActionResult> Logout()
     {
         await _usersService.SignOut();
+
         return RedirectToAction(nameof(UrlsController.Index), "Urls");
+    }
+
+    public async Task<IActionResult> IsEmailAreadyExist(string email)
+    {
+        var userResponse = await _usersService.GetUserByEmail(email);
+
+        return userResponse is null ? Json(true) : Json(false);
     }
 }

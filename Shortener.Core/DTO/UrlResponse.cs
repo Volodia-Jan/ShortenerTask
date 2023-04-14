@@ -45,6 +45,16 @@ public class UrlResponse
 
         return result;
     }
+
+    public override string ToString()
+    {
+        return $"UrlResponse{{ UrlId:{UrlId}, " +
+            $"Url:{Url}, " +
+            $"ShortUrl:{ShortUrl}, " +
+            $"UserId:{UserId}, " +
+            $"Username:{Username}, " +
+            $"CreatedDate:{CreatedDate} }}";
+    }
 }
 
 public static class UrlExtension

@@ -1,6 +1,6 @@
 ﻿@{
     Layout = null;
-    ViewBag.Title = "Login page";
+ViewBag.Title = "Login page";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +14,7 @@
         <div class="container">
             <div class="form-container">
                 <h4>Login</h4>
-                <form asp-action="Login" asp-controller="Authorithation">
+                <form asp-action="Login" asp-controller="Authorithation" asp-route-ReturnUrl="@Context.Request.Query["ReturnUrl"]" method="post">
                     <div class="form-field">
                         <label for="email">Username:</label>
                         <input type="email" name="email" id="email" />

@@ -133,7 +133,7 @@ public class UrlsServiceTest
 
         _mockUrlsRepo.Setup(repo => repo.FindAll())
             .ReturnsAsync(urlList);
-        
+
         var actualUrlList = await _urlsService.GetAllUrls();
 
         actualUrlList.Should().NotBeEmpty();
@@ -185,7 +185,7 @@ public class UrlsServiceTest
 
         await throwArgumentException.Should().ThrowAsync<ArgumentException>();
     }
-    
+
     [Fact]
     public async Task GetBaseUrlByShortUrl_ReturnUrl()
     {
@@ -210,7 +210,7 @@ public class UrlsServiceTest
 
         await throwArgumentNullException.Should().ThrowAsync<ArgumentNullException>();
     }
-    
+
     [Fact]
     public async Task DeleteUrlById_UrlNull_ThrowArgumentException()
     {
@@ -222,7 +222,7 @@ public class UrlsServiceTest
 
         _mockUsersService.Setup(service => service.GetUserByEmail(It.IsAny<string>()))
             .ReturnsAsync(userResponse);
-        
+
         _mockUsersService.Setup(service => service.IsUserHasRole(It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(true);
 
@@ -247,7 +247,7 @@ public class UrlsServiceTest
 
         _mockUsersService.Setup(service => service.GetUserByEmail(It.IsAny<string>()))
             .ReturnsAsync(userResponse);
-        
+
         _mockUsersService.Setup(service => service.IsUserHasRole(It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(false);
 
@@ -273,7 +273,7 @@ public class UrlsServiceTest
 
         _mockUsersService.Setup(service => service.GetUserByEmail(It.IsAny<string>()))
             .ReturnsAsync(userResponse);
-        
+
         _mockUsersService.Setup(service => service.IsUserHasRole(It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(true);
 

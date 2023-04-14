@@ -14,4 +14,12 @@ public class AddPostRequest
     public string? Topic { get; set; }
     public string? PostDetails { get; set; }
     public string? AuthorName { get; set; }
+
+    public override string? ToString()
+    {
+        return $"AddPostRequest{{ Id:{Id}, " +
+            $"Topic:{Topic}, " +
+            $"PostDetails:{PostDetails}, " +
+            $"AuthorName:{AuthorName} }}";
+    }
 }

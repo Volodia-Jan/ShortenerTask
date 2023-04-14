@@ -3,9 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Shortener.Core.DTO;
 using Shortener.Core.ServiceContracts;
+using Shortener_DEMO_.Filters;
+using Shortener_DEMO_.Filters.ResultFilters;
 
 namespace Shortener_DEMO_.Controllers;
 
+// This filter applies for every method in controller
+// and for example I wanna skip it in some method
+[TypeFilter(typeof(UrlsAlwaysRunResultFilter))]
 [Route("[controller]/[action]")]
 public class UrlsController : Controller
 {
@@ -19,7 +24,9 @@ public class UrlsController : Controller
     }
 
     [Route("/")]
-    [AllowAnonymous]
+    //[AllowAnonymous]
+    [Authorize]
+    [SkipFilter]
     public async Task<IActionResult> Index()
     {
         var urlResponses = await _urlsService.GetAllUrls();
@@ -28,6 +35,7 @@ public class UrlsController : Controller
     }
 
     [Authorize]
+    [TypeFilter(typeof(UrlsListResultFilter))]
     public async Task<IActionResult> Create(string? url)
     {
         if (User.Identity is null || !User.Identity.IsAuthenticated)
@@ -50,7 +58,7 @@ public class UrlsController : Controller
     [Authorize]
     public async Task<IActionResult> Info(Guid urlId)
     {
-        var urlResponse = await _urlsService.GetUrlById(urlId);
+        var urlResponse = await _urlsService.GetUrlById(Guid.NewGuid());
 
         return View(urlResponse);
     }

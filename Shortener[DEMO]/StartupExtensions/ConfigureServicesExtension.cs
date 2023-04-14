@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,8 @@ using Shortener.Core.ServiceContracts;
 using Shortener.Core.Services;
 using Shortener.Infrastructure.DbContext;
 using Shortener.Infrastructure.Repositories;
+using Shortener_DEMO_.Filters.ActionFilters;
+using static System.Net.WebRequestMethods;
 
 namespace Shortener_DEMO_.StartupExtensions;
 
@@ -15,7 +18,24 @@ public static class ConfigureServicesExtension
 {
     public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddControllersWithViews();
+        services.AddControllersWithViews(options =>
+        {
+            // Returns needed service from Service collection
+            var logger = services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
+
+            // Adding Global filter as generic type
+            // options.Filters.Add<ResponseHeaderActionFilter>()
+            // But that Filter has parameters so we have to use second way
+            // options.Filters.Add(new ResponseHeaderActionFilter(logger, "My-Global-Key", "My-Global-Value"))
+
+            // But now we can not set the order number for global filter
+            // To solve this problem our Filter class have to implement IOrderedFilter
+            options.Filters.Add(new ResponseHeaderActionFilter(logger, "My-Global-Key", "My-Global-Value", 1));
+
+            // Therefore if filter doesn't have additonal parameters and we wanna
+            // initialize order number we don't need to implement IOrderedFilter, just use next statments:
+            // options.Filters.Add<ResponseHeaderActionFilter>(3)
+        });
 
         // Adding DbContext
         services.AddDbContext<ApplicationDbContext>(options =>
@@ -38,13 +58,15 @@ public static class ConfigureServicesExtension
             .RequireAuthenticatedUser()
             .Build();
         });
+
         services.ConfigureApplicationCookie(options =>
         {
-            options.LoginPath = "/auth/Login";
+            options.LoginPath = "/Auth/Login";
         });
 
         // Adding indentity
-        services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+        services
+            .AddIdentity<ApplicationUser, ApplicationRole>(options =>
         {
             options.Password.RequiredLength = 4;
             options.Password.RequireNonAlphanumeric = false;
@@ -55,6 +77,19 @@ public static class ConfigureServicesExtension
             .AddDefaultTokenProviders()
             .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
             .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
+
+        // Http logging is helping us to log
+        // Request and response info.
+        // It good idea to use it
+        // only in Debug reason
+        services.AddHttpLogging(
+            // Configure what we need to Log
+            // By default it logs everything
+            options =>
+            {
+                options.LoggingFields = HttpLoggingFields.RequestProperties | HttpLoggingFields.ResponsePropertiesAndHeaders;
+            });
+
         return services;
     }
 }

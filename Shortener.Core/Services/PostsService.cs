@@ -50,11 +50,8 @@ public class PostsService : IPostsService
         return savedPost.ToResponse();
     }
 
-    public async Task<List<PostResponse>> GetAllPosts()
-    {
-        var posts = await _postsRepository.GetAllPosts();
-        return posts
+    public async Task<List<PostResponse>> GetAllPosts() =>
+        (await _postsRepository.GetAllPosts())
             .Select(post => post.ToResponse())
             .ToList();
-    }
 }

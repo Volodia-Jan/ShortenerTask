@@ -16,4 +16,10 @@ public class LoginDTO
 
     [MinLength(4, ErrorMessage = "{0} must have at least {1} characters")]
     public string? Password { get; set; }
+
+    public override string? ToString()
+    {
+        return $"LoginDto{{ Email:{Email}, " +
+            $"Password:{Password} }}";
+    }
 }

@@ -12,7 +12,7 @@ public class Post
 {
     public Guid Id { get; set; }
     public string? Topic { get; set; }
-    public string? PostDetails { get; set;}
+    public string? PostDetails { get; set; }
     public DateTime? CreatedAt { get; set; }
     public Guid? AuthorId { get; set; }
 
